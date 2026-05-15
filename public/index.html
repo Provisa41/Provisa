@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Pro Visa</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1>Pro Visa</h1>
+        <p id="user-greeting" class="muted">Загрузка…</p>
+      </header>
+
+      <nav class="tabs" role="tablist">
+        <button type="button" class="tab active" data-tab="documents">Документы</button>
+        <button type="button" class="tab" data-tab="updates">Обновления</button>
+        <button type="button" class="tab" data-tab="consult">Консультация</button>
+      </nav>
+
+      <main>
+        <section id="panel-documents" class="panel active">
+          <p class="muted">
+            Загрузите файл — получите демо-оценку готовности (~30 сек в продакшене).
+          </p>
+          <label class="file-label">
+            <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" />
+            <span>Выбрать документ</span>
+          </label>
+          <button type="button" id="check-btn" class="btn primary" disabled>
+            Проверить
+          </button>
+          <div id="result" class="result hidden"></div>
+        </section>
+
+        <section id="panel-updates" class="panel">
+          <ul class="updates-list">
+            <li>
+              <strong>Шенген</strong> — следите за сроками записи в консульствах.
+            </li>
+            <li>
+              <strong>США B1/B2</strong> — актуальные окна для интервью.
+            </li>
+            <li>
+              <strong>UK</strong> — электронная авторизация ETA.
+            </li>
+          </ul>
+          <p class="badge">MVP: пуш-уведомления в полной версии</p>
+        </section>
+
+        <section id="panel-consult" class="panel">
+          <label for="consult-topic">Тема консультации</label>
+          <textarea
+            id="consult-topic"
+            rows="4"
+            placeholder="Страна, тип визы, сроки…"
+          ></textarea>
+          <button type="button" id="consult-btn" class="btn primary">
+            Отправить заявку
+          </button>
+          <p id="consult-status" class="muted"></p>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

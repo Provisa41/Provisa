@@ -1,0 +1,144 @@
+:root {
+  --tg-bg: #ffffff;
+  --tg-text: #1a1a1a;
+  --tg-secondary: #f4f4f5;
+  --tg-button: #2aabee;
+  --tg-button-text: #ffffff;
+  --radius: 12px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--tg-bg);
+  color: var(--tg-text);
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+}
+
+.header h1 {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+}
+
+.muted {
+  color: color-mix(in srgb, var(--tg-text) 65%, transparent);
+  font-size: 0.9rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0 16px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--tg-secondary);
+  color: var(--tg-text);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--tg-button);
+  color: var(--tg-button-text);
+}
+
+.panel {
+  display: none;
+}
+
+.panel.active {
+  display: block;
+}
+
+.file-label {
+  display: block;
+  padding: 24px;
+  margin: 12px 0;
+  text-align: center;
+  border: 2px dashed color-mix(in srgb, var(--tg-text) 25%, transparent);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.file-label input {
+  display: none;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: var(--tg-button);
+  color: var(--tg-button-text);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.result {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--tg-secondary);
+  border-radius: var(--radius);
+}
+
+.result.hidden {
+  display: none;
+}
+
+.score {
+  font-size: 1.1rem;
+}
+
+.updates-list {
+  padding-left: 1.2rem;
+  line-height: 1.6;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  background: var(--tg-secondary);
+}
+
+textarea {
+  width: 100%;
+  margin: 8px 0 12px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--tg-text) 20%, transparent);
+  border-radius: var(--radius);
+  background: var(--tg-bg);
+  color: var(--tg-text);
+  resize: vertical;
+}
+
+.error {
+  color: #c0392b;
+}
