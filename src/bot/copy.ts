@@ -30,9 +30,9 @@ export const updatesText = `🌍 <b>Визовые новости</b>
 
 export const consultText = `👤 <b>Консультация с экспертом</b>
 
-Обсудите ваш кейс с визовым специалистом. В MVP — заявка без реальной оплаты.
+Напишите вопрос в чат или отправьте номер телефона — заявка придёт специалисту.
 
-Откройте Mini App → «Заказать консультацию».`;
+Команда /consult — то же самое.`;
 
 /** Stub AI readiness score for V1 demo */
 export function mockDocumentScore(fileName: string): {

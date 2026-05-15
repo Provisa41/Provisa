@@ -27,13 +27,12 @@ export type CountryInfo = {
 
 export const visaNews: VisaNewsItem[] = [
   {
-    id: "n1",
-    countryId: "schengen",
-    date: "2026-05-10",
-    title: "Шенген: очереди в визовые центры",
-    summary:
-      "В ряде стран ЕС срок ожидания записи — 3–6 недель. Рекомендуем подавать за 2–3 месяца до поездки и проверять слоты VFS/TLScontact ежедневно.",
-    tag: "сроки",
+    id: "n13",
+    countryId: "schengen",  // id страны из countries
+    date: "2026-05-16",
+    title: "Заголовок новости",
+    summary: "Краткое описание для пользователя",
+    tag: "сроки",  // необязательно
   },
   {
     id: "n2",

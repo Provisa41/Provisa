@@ -13,6 +13,7 @@ const fileInput = document.getElementById("file-input");
 const checkBtn = document.getElementById("check-btn");
 const resultEl = document.getElementById("result");
 const consultBtn = document.getElementById("consult-btn");
+const consultPhone = document.getElementById("consult-phone");
 const consultTopic = document.getElementById("consult-topic");
 const consultStatus = document.getElementById("consult-status");
 const countrySelect = document.getElementById("country-select");
@@ -248,9 +249,11 @@ consultBtn?.addEventListener("click", async () => {
   try {
     const data = await apiPost("/api/consult/request", {
       topic: consultTopic?.value ?? "",
+      phone: consultPhone?.value?.trim() ?? "",
     });
     consultStatus.textContent = data.message;
     consultTopic.value = "";
+    if (consultPhone) consultPhone.value = "";
     tg?.HapticFeedback?.notificationOccurred("success");
   } catch (err) {
     consultStatus.textContent = err.message;

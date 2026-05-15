@@ -5,6 +5,7 @@ import { validateInitData } from "./auth/validateInitData.js";
 import { mockDocumentScore } from "./bot/copy.js";
 import { config } from "./config.js";
 import { countries, getCountry, getNews } from "./data/visaData.js";
+import { sendConsultLead } from "./services/consultLead.js";
 import type { Bot } from "grammy";
 import { webhookCallback } from "grammy";
 
@@ -103,7 +104,7 @@ export function createServer(bot: Bot): express.Express {
     res.json({ ok: true, ...result, demo: true });
   });
 
-  app.post("/api/consult/request", (req, res) => {
+  app.post("/api/consult/request", async (req, res) => {
     const initData =
       typeof req.body?.initData === "string"
         ? req.body.initData
@@ -118,10 +119,21 @@ export function createServer(bot: Bot): express.Express {
       const data = validateInitData(initData, config.botToken);
       const topic =
         typeof req.body?.topic === "string" ? req.body.topic.slice(0, 500) : "";
+      const phone =
+        typeof req.body?.phone === "string" ? req.body.phone.slice(0, 32) : undefined;
+
+      const { delivered } = await sendConsultLead(bot, {
+        source: "mini_app",
+        user: data.user,
+        phone,
+        topic,
+      });
+
       res.json({
         ok: true,
-        demo: true,
-        message: "Заявка принята (MVP). Эксперт свяжется с вами в Telegram.",
+        message: delivered
+          ? "Заявка отправлена. Специалист свяжется с вами в Telegram."
+          : "Заявка принята. Мы свяжемся с вами в ближайшее время.",
         userId: data.user?.id,
         topic,
       });

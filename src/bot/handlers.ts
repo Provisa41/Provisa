@@ -17,8 +17,10 @@ import {
   sectionInlineKeyboard,
   welcomeInlineKeyboard,
 } from "./keyboards.js";
+import { promptConsult, registerConsultHandlers } from "./consult.js";
 
 export function registerBotHandlers(bot: Bot): void {
+  registerConsultHandlers(bot);
   bot.command("start", async (ctx) => {
     const startParam = ctx.match?.trim();
     const me = await ctx.api.getMe();
@@ -56,13 +58,6 @@ export function registerBotHandlers(bot: Bot): void {
     });
   });
 
-  bot.command("consult", async (ctx) => {
-    await ctx.reply(consultText, {
-      parse_mode: "HTML",
-      reply_markup: sectionInlineKeyboard("consult"),
-    });
-  });
-
   bot.callbackQuery("cmd:countries", async (ctx) => {
     await ctx.answerCallbackQuery();
     await ctx.editMessageText(countriesIntroText, {
@@ -81,10 +76,7 @@ export function registerBotHandlers(bot: Bot): void {
 
   bot.callbackQuery("cmd:consult", async (ctx) => {
     await ctx.answerCallbackQuery();
-    await ctx.editMessageText(consultText, {
-      parse_mode: "HTML",
-      reply_markup: sectionInlineKeyboard("consult"),
-    });
+    await promptConsult(ctx);
   });
 
   bot.callbackQuery("countries:list", async (ctx) => {
@@ -149,12 +141,7 @@ export function registerBotHandlers(bot: Bot): void {
     }),
   );
 
-  bot.hears("👤 Консультация", (ctx) =>
-    ctx.reply(consultText, {
-      parse_mode: "HTML",
-      reply_markup: sectionInlineKeyboard("consult"),
-    }),
-  );
+  bot.hears("👤 Консультация", (ctx) => promptConsult(ctx));
 
   bot.hears("🛂 Открыть приложение", async (ctx) => {
     const me = await ctx.api.getMe();
