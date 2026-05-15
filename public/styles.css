@@ -38,13 +38,15 @@ body {
 
 .tabs {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
   margin: 20px 0 16px;
 }
 
 .tab {
-  flex: 1;
-  padding: 10px 8px;
+  flex: 1 1 22%;
+  min-width: 72px;
+  padding: 8px 6px;
   border: none;
   border-radius: var(--radius);
   background: var(--tg-secondary);
@@ -114,9 +116,71 @@ body {
   font-size: 1.1rem;
 }
 
-.updates-list {
+select {
+  width: 100%;
+  margin: 8px 0 12px;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--tg-text) 20%, transparent);
+  background: var(--tg-secondary);
+  color: var(--tg-text);
+  font-size: 1rem;
+}
+
+.country-detail,
+.news-list {
+  line-height: 1.5;
+}
+
+.country-summary {
+  margin: 0 0 12px;
+}
+
+.visa-type {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--tg-secondary);
+  border-radius: var(--radius);
+}
+
+.visa-type h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.visa-meta {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.visa-type ul {
+  margin: 0;
   padding-left: 1.2rem;
-  line-height: 1.6;
+}
+
+.visa-note {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.news-card {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: var(--tg-secondary);
+  border-radius: var(--radius);
+}
+
+.news-card h3 {
+  margin: 4px 0 6px;
+  font-size: 0.95rem;
+}
+
+.news-meta {
+  margin: 0;
+  font-size: 0.75rem;
+  opacity: 0.8;
 }
 
 .badge {

@@ -18,15 +18,26 @@
       </header>
 
       <nav class="tabs" role="tablist">
-        <button type="button" class="tab active" data-tab="documents">Документы</button>
-        <button type="button" class="tab" data-tab="updates">Обновления</button>
+        <button type="button" class="tab active" data-tab="countries">Страны</button>
+        <button type="button" class="tab" data-tab="documents">Проверка</button>
+        <button type="button" class="tab" data-tab="updates">Новости</button>
         <button type="button" class="tab" data-tab="consult">Консультация</button>
       </nav>
 
       <main>
-        <section id="panel-documents" class="panel active">
+        <section id="panel-countries" class="panel active">
+          <label for="country-select">Страна назначения</label>
+          <select id="country-select">
+            <option value="">Загрузка…</option>
+          </select>
+          <div id="country-detail" class="country-detail muted">
+            Выберите страну, чтобы увидеть список документов.
+          </div>
+        </section>
+
+        <section id="panel-documents" class="panel">
           <p class="muted">
-            Загрузите файл — получите демо-оценку готовности (~30 сек в продакшене).
+            Загрузите скан — демо-оценка готовности. Чек-лист по стране — вкладка «Страны».
           </p>
           <label class="file-label">
             <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" />
@@ -39,18 +50,11 @@
         </section>
 
         <section id="panel-updates" class="panel">
-          <ul class="updates-list">
-            <li>
-              <strong>Шенген</strong> — следите за сроками записи в консульствах.
-            </li>
-            <li>
-              <strong>США B1/B2</strong> — актуальные окна для интервью.
-            </li>
-            <li>
-              <strong>UK</strong> — электронная авторизация ETA.
-            </li>
-          </ul>
-          <p class="badge">MVP: пуш-уведомления в полной версии</p>
+          <label for="news-filter">Фильтр по стране</label>
+          <select id="news-filter">
+            <option value="">Все страны</option>
+          </select>
+          <div id="news-list" class="news-list muted">Загрузка новостей…</div>
         </section>
 
         <section id="panel-consult" class="panel">

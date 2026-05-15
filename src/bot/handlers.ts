@@ -1,10 +1,17 @@
 import type { Bot } from "grammy";
 import {
   consultText,
+  countriesIntroText,
   documentsText,
   updatesText,
   welcomeText,
 } from "./copy.js";
+import { formatNewsDigestHtml, getNews } from "../data/visaData.js";
+import {
+  countriesListKeyboard,
+  countryDetailKeyboard,
+  getCountryDetailText,
+} from "./countries.js";
 import {
   mainReplyKeyboard,
   sectionInlineKeyboard,
@@ -35,8 +42,15 @@ export function registerBotHandlers(bot: Bot): void {
     });
   });
 
+  bot.command("countries", async (ctx) => {
+    await ctx.reply(countriesIntroText, {
+      parse_mode: "HTML",
+      reply_markup: countriesListKeyboard(),
+    });
+  });
+
   bot.command("updates", async (ctx) => {
-    await ctx.reply(updatesText, {
+    await ctx.reply(formatNewsDigestHtml(5), {
       parse_mode: "HTML",
       reply_markup: sectionInlineKeyboard("updates"),
     });
@@ -49,30 +63,98 @@ export function registerBotHandlers(bot: Bot): void {
     });
   });
 
-  bot.callbackQuery(/^cmd:(updates|consult)$/, async (ctx) => {
-    const cmd = ctx.match![1] as "updates" | "consult";
-    const text = cmd === "updates" ? updatesText : consultText;
+  bot.callbackQuery("cmd:countries", async (ctx) => {
     await ctx.answerCallbackQuery();
-    await ctx.editMessageText(text, {
+    await ctx.editMessageText(countriesIntroText, {
       parse_mode: "HTML",
-      reply_markup: sectionInlineKeyboard(cmd),
+      reply_markup: countriesListKeyboard(),
     });
   });
 
-  bot.hears("📄 Документы", (ctx) => ctx.reply(documentsText, {
-    parse_mode: "HTML",
-    reply_markup: sectionInlineKeyboard("documents"),
-  }));
+  bot.callbackQuery("cmd:updates", async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.editMessageText(formatNewsDigestHtml(5), {
+      parse_mode: "HTML",
+      reply_markup: sectionInlineKeyboard("updates"),
+    });
+  });
 
-  bot.hears("🌍 Обновления", (ctx) => ctx.reply(updatesText, {
-    parse_mode: "HTML",
-    reply_markup: sectionInlineKeyboard("updates"),
-  }));
+  bot.callbackQuery("cmd:consult", async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.editMessageText(consultText, {
+      parse_mode: "HTML",
+      reply_markup: sectionInlineKeyboard("consult"),
+    });
+  });
 
-  bot.hears("👤 Консультация", (ctx) => ctx.reply(consultText, {
-    parse_mode: "HTML",
-    reply_markup: sectionInlineKeyboard("consult"),
-  }));
+  bot.callbackQuery("countries:list", async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.editMessageText(countriesIntroText, {
+      parse_mode: "HTML",
+      reply_markup: countriesListKeyboard(),
+    });
+  });
+
+  bot.callbackQuery(/^country:(.+)$/, async (ctx) => {
+    const countryId = ctx.match![1];
+    const text = getCountryDetailText(countryId);
+    await ctx.answerCallbackQuery();
+    if (!text) {
+      await ctx.reply("Страна не найдена.");
+      return;
+    }
+    await ctx.editMessageText(text, {
+      parse_mode: "HTML",
+      reply_markup: countryDetailKeyboard(countryId),
+    });
+  });
+
+  bot.callbackQuery(/^news:(.+)$/, async (ctx) => {
+    const countryId = ctx.match![1];
+    const items = getNews(countryId).slice(0, 4);
+    await ctx.answerCallbackQuery();
+    if (!items.length) {
+      await ctx.reply("Новостей по этой стране пока нет.");
+      return;
+    }
+    const lines = items.flatMap((n) => [
+      `<b>${n.title}</b> (${n.date})`,
+      n.summary,
+      "",
+    ]);
+    await ctx.reply(lines.join("\n"), {
+      parse_mode: "HTML",
+      reply_markup: countryDetailKeyboard(countryId),
+    });
+  });
+
+  bot.hears("📄 Документы", (ctx) =>
+    ctx.reply(documentsText, {
+      parse_mode: "HTML",
+      reply_markup: sectionInlineKeyboard("documents"),
+    }),
+  );
+
+  bot.hears("🗺 Страны", (ctx) =>
+    ctx.reply(countriesIntroText, {
+      parse_mode: "HTML",
+      reply_markup: countriesListKeyboard(),
+    }),
+  );
+
+  bot.hears("🌍 Обновления", (ctx) =>
+    ctx.reply(formatNewsDigestHtml(5), {
+      parse_mode: "HTML",
+      reply_markup: sectionInlineKeyboard("updates"),
+    }),
+  );
+
+  bot.hears("👤 Консультация", (ctx) =>
+    ctx.reply(consultText, {
+      parse_mode: "HTML",
+      reply_markup: sectionInlineKeyboard("consult"),
+    }),
+  );
 
   bot.hears("🛂 Открыть приложение", async (ctx) => {
     const me = await ctx.api.getMe();
@@ -83,16 +165,16 @@ export function registerBotHandlers(bot: Bot): void {
 
   bot.on("message", async (ctx, next) => {
     if (ctx.message.text?.startsWith("/")) return next();
-    if (
-      ctx.message.text === "📄 Документы" ||
-      ctx.message.text === "🌍 Обновления" ||
-      ctx.message.text === "👤 Консультация" ||
-      ctx.message.text === "🛂 Открыть приложение"
-    ) {
-      return next();
-    }
+    const known = [
+      "📄 Документы",
+      "🗺 Страны",
+      "🌍 Обновления",
+      "👤 Консультация",
+      "🛂 Открыть приложение",
+    ];
+    if (known.includes(ctx.message.text ?? "")) return next();
     await ctx.reply(
-      "Используйте команды /documents, /updates, /consult или кнопки ниже.",
+      "Команды: /countries /documents /updates /consult — или кнопки меню.",
       { reply_markup: mainReplyKeyboard() },
     );
   });

@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { validateInitData } from "./auth/validateInitData.js";
 import { mockDocumentScore } from "./bot/copy.js";
 import { config } from "./config.js";
+import { countries, getCountry, getNews } from "./data/visaData.js";
 import type { Bot } from "grammy";
 import { webhookCallback } from "grammy";
 
@@ -20,6 +21,34 @@ export function createServer(bot: Bot): express.Express {
 
   app.get("/health", (_req, res) => {
     res.json({ ok: true, service: "provisa" });
+  });
+
+  app.get("/api/countries", (_req, res) => {
+    res.json({
+      ok: true,
+      countries: countries.map((c) => ({
+        id: c.id,
+        flag: c.flag,
+        name: c.name,
+        region: c.region,
+        summary: c.summary,
+      })),
+    });
+  });
+
+  app.get("/api/countries/:id", (req, res) => {
+    const country = getCountry(req.params.id);
+    if (!country) {
+      res.status(404).json({ ok: false, error: "country not found" });
+      return;
+    }
+    res.json({ ok: true, country });
+  });
+
+  app.get("/api/news", (req, res) => {
+    const countryId =
+      typeof req.query.country === "string" ? req.query.country : undefined;
+    res.json({ ok: true, news: getNews(countryId) });
   });
 
   app.post(`/${config.webhookSecret}`, webhookCallback(bot, "express"));

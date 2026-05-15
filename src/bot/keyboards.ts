@@ -4,9 +4,11 @@ import { miniAppUrl } from "../config.js";
 export function mainReplyKeyboard() {
   return new Keyboard()
     .text("📄 Документы")
-    .text("🌍 Обновления")
+    .text("🗺 Страны")
     .row()
+    .text("🌍 Обновления")
     .text("👤 Консультация")
+    .row()
     .text("🛂 Открыть приложение")
     .resized();
 }
@@ -17,7 +19,8 @@ export function welcomeInlineKeyboard(botUsername?: string) {
     .row()
     .webApp("📄 Проверить документы", miniAppUrl("documents"))
     .row()
-    .text("🌍 Обновления", "cmd:updates")
+    .text("🗺 Страны", "cmd:countries")
+    .text("🌍 Новости", "cmd:updates")
     .text("👤 Консультация", "cmd:consult");
 
   if (botUsername) {
@@ -30,7 +33,9 @@ export function welcomeInlineKeyboard(botUsername?: string) {
   return kb;
 }
 
-export function sectionInlineKeyboard(section: "documents" | "updates" | "consult") {
+export function sectionInlineKeyboard(
+  section: "documents" | "updates" | "consult" | "countries",
+) {
   return new InlineKeyboard().webApp(
     "Открыть в приложении",
     miniAppUrl(section),

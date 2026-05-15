@@ -16,8 +16,9 @@ export function createBot(): Bot {
 
 export const BOT_COMMANDS = [
   { command: "start", description: "Запуск бота" },
-  { command: "documents", description: "Загрузка и проверка документов" },
-  { command: "updates", description: "Изменения визовой политики" },
+  { command: "countries", description: "Документы по странам" },
+  { command: "documents", description: "Проверка документов AI" },
+  { command: "updates", description: "Визовые новости" },
   { command: "consult", description: "Заказать консультацию" },
 ] as const;
 
