@@ -12,7 +12,7 @@ async function main(): Promise<void> {
 
   const app = getApp();
 
-  app.listen(config.port, async () => {
+  const server = app.listen(config.port, async () => {
     const url = webhookUrl();
     const miniApp = `${config.webhookBaseUrl}${config.miniAppPath}`;
     console.log(`Pro Visa listening on http://localhost:${config.port}`);
@@ -21,6 +21,18 @@ async function main(): Promise<void> {
 
     if (config.isDev) {
       console.warn("Dev mode: webhook not registered (use public HTTPS for Telegram)");
+      console.log("✅ Starting bot in polling mode...");
+      
+      setTimeout(() => {
+        bot.start({
+          onStart: (botInfo) => {
+            console.log(`✅ Bot @${botInfo.username} polling started - ready to receive messages!`);
+          },
+        }).catch((err) => {
+          console.error("Polling error:", err);
+        });
+      }, 1000);
+      
       return;
     }
 

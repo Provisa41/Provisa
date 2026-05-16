@@ -1,9 +1,12 @@
+import type { Bot } from "grammy";
+import { Bot as GrammyBot } from "grammy";
+import { config } from "../config.js";
 import { Bot } from "grammy";
 import { config } from "../config.js";
 import { registerBotHandlers } from "./handlers.js";
 import { mainReplyKeyboard } from "./keyboards.js";
 
-export function createBot(): Bot {
+await configureBot(bot);
   const bot = new Bot(config.botToken);
   registerBotHandlers(bot);
 
