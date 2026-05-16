@@ -60,14 +60,14 @@ document.querySelectorAll(".tab").forEach((btn) => {
 });
 
 async function apiGet(path) {
-  const res = await fetch(path);
+  const res = await fetch(`${window.location.origin}${path}`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error ?? "Request failed");
   return data;
 }
 
 async function apiPost(path, body) {
-  const res = await fetch(path, {
+  const res = await fetch(`${window.location.origin}${path}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
